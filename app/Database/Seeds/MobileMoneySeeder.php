@@ -8,18 +8,18 @@ class MobileMoneySeeder extends Seeder
     public function run()
     {
         $this->db->table('prefixes')->insertBatch([
-            ['prefixe' => '032'],
-            ['prefixe' => '033'],
-            ['prefixe' => '034'],
-            ['prefixe' => '035'],
-            ['prefixe' => '037'],
-            ['prefixe' => '038'],
-            ['prefixe' => '+26132'],
-            ['prefixe' => '+26133'],
-            ['prefixe' => '+26134'],
-            ['prefixe' => '+26135'],
-            ['prefixe' => '+26137'],
-            ['prefixe' => '+26138'],
+            ['prefixe' => '032', 'operateur' => 'orange'],
+            ['prefixe' => '033', 'operateur' => 'airtel'],
+            ['prefixe' => '034', 'operateur' => 'yas'],
+            ['prefixe' => '035', 'operateur' => 'airtel'],
+            ['prefixe' => '037', 'operateur' => 'orange'],
+            ['prefixe' => '038', 'operateur' => 'yas'],
+            ['prefixe' => '+26132', 'operateur' => 'orange'],
+            ['prefixe' => '+26133', 'operateur' => 'airtel'],
+            ['prefixe' => '+26134', 'operateur' => 'yas'],
+            ['prefixe' => '+26135', 'operateur' => 'airtel'],
+            ['prefixe' => '+26137', 'operateur' => 'orange'],
+            ['prefixe' => '+26138', 'operateur' => 'yas'],
         ]);
 
         $this->db->table('clients')->insertBatch([
@@ -33,7 +33,7 @@ class MobileMoneySeeder extends Seeder
             ['nom' => 'Transfert'],
         ]);
 
-        $this->db->table('baremes_frais')->insertBatch([
+        $baremes = [
             ['type_operation_id' => 1, 'montant_minimum' => 1,        'montant_maximum' => 5000,     'frais' => 0],
             ['type_operation_id' => 1, 'montant_minimum' => 5001,     'montant_maximum' => 10000,    'frais' => 0],
             ['type_operation_id' => 1, 'montant_minimum' => 10001,    'montant_maximum' => 50000,    'frais' => 0],
@@ -50,14 +50,26 @@ class MobileMoneySeeder extends Seeder
             ['type_operation_id' => 2, 'montant_minimum' => 500001,   'montant_maximum' => 1000000,  'frais' => 5000],
             ['type_operation_id' => 2, 'montant_minimum' => 1000001,  'montant_maximum' => 2000000,  'frais' => 8000],
 
-            ['type_operation_id' => 3, 'montant_minimum' => 1,        'montant_maximum' => 5000,     'frais' => 100],
-            ['type_operation_id' => 3, 'montant_minimum' => 5001,     'montant_maximum' => 10000,    'frais' => 200],
-            ['type_operation_id' => 3, 'montant_minimum' => 10001,    'montant_maximum' => 50000,    'frais' => 500],
-            ['type_operation_id' => 3, 'montant_minimum' => 50001,    'montant_maximum' => 100000,   'frais' => 1000],
-            ['type_operation_id' => 3, 'montant_minimum' => 100001,   'montant_maximum' => 500000,   'frais' => 2000],
-            ['type_operation_id' => 3, 'montant_minimum' => 500001,   'montant_maximum' => 1000000,  'frais' => 3500],
-            ['type_operation_id' => 3, 'montant_minimum' => 1000001,  'montant_maximum' => 2000000,  'frais' => 5000],
-        ]);
+            ['type_operation_id' => 3, 'montant_minimum' => 1,        'montant_maximum' => 5000,     'frais' => 100, 'commission_autre_operateur' => 1],
+            ['type_operation_id' => 3, 'montant_minimum' => 5001,     'montant_maximum' => 10000,    'frais' => 200, 'commission_autre_operateur' => 2],
+            ['type_operation_id' => 3, 'montant_minimum' => 10001,    'montant_maximum' => 50000,    'frais' => 500, 'commission_autre_operateur' => 2],
+            ['type_operation_id' => 3, 'montant_minimum' => 50001,    'montant_maximum' => 100000,   'frais' => 1000, 'commission_autre_operateur' => 2.5],
+            ['type_operation_id' => 3, 'montant_minimum' => 100001,   'montant_maximum' => 500000,   'frais' => 2000, 'commission_autre_operateur' => 3],
+            ['type_operation_id' => 3, 'montant_minimum' => 500001,   'montant_maximum' => 1000000,  'frais' => 3500, 'commission_autre_operateur' => 3],
+            ['type_operation_id' => 3, 'montant_minimum' => 1000001,  'montant_maximum' => 2000000,  'frais' => 5000, 'commission_autre_operateur' => 3],
+        ];
+
+        $baremesAInserer = [];
+        foreach (['yas', 'orange', 'airtel'] as $operateur) {
+            foreach ($baremes as $bareme) {
+                if (!isset($bareme['commission_autre_operateur'])) {
+                    $bareme['commission_autre_operateur'] = 0;
+                }
+                $bareme['operateur'] = $operateur;
+                $baremesAInserer[] = $bareme;
+            }
+        }
+        $this->db->table('baremes_frais')->insertBatch($baremesAInserer);
 
         $this->db->table('operations')->insertBatch([
             [
