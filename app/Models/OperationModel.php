@@ -106,15 +106,18 @@ class OperationModel extends Model
     public function getGainsDetail(string $operateurCourant): array
     {
         $this->initialiserSchema();
+        $baremeModel = new \App\Models\BaremeFraisModel();
+        
         $operations = $this->select('operations.*, types_operation.nom as type_operation')
             ->join('types_operation', 'types_operation.id = operations.type_operation_id', 'left')
             ->findAll();
 
         $gains = [
-            'total' => 0,
-            'meme_operateur' => 0,
-            'autres_operateurs' => 0,
-            'par_type' => []
+            'total'              => 0,
+            'meme_operateur'     => 0,
+            'autres_operateurs'  => 0,
+            'commissions'        => 0,
+            'par_type'           => []
         ];
         
         $montantsAEnvoyer = [];
@@ -126,33 +129,40 @@ class OperationModel extends Model
             $opClient = $this->getOperateurParTelephone($client['telephone']);
             
             if ($opClient === $operateurCourant) {
-                $gains['total'] += (float)$op['frais'];
+                $fraisTotal = (float)$op['frais'];
+                $gains['total'] += $fraisTotal;
                 
                 if (!isset($gains['par_type'][$op['type_operation']])) {
                     $gains['par_type'][$op['type_operation']] = 0;
                 }
-                $gains['par_type'][$op['type_operation']] += (float)$op['frais'];
+                $gains['par_type'][$op['type_operation']] += $fraisTotal;
                 
                 if ($op['destinataire']) {
                     $opDest = $this->getOperateurParTelephone($op['destinataire']);
                     if ($opDest && $opDest !== $operateurCourant) {
-                        $gains['autres_operateurs'] += (float)$op['frais'];
+                        // Calculer la part de commission inter-opérateur
+                        $bareme = $baremeModel->rechercherBaremeSelonMontant(3, (float)$op['montant'], $operateurCourant);
+                        $tauxCommission = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
+                        $commission = ((float)$op['montant'] * $tauxCommission / 100);
+                        
+                        $gains['commissions']      += $commission;
+                        $gains['autres_operateurs'] += $fraisTotal;
                         
                         if (!isset($montantsAEnvoyer[$opDest])) {
                             $montantsAEnvoyer[$opDest] = 0;
                         }
                         $montantsAEnvoyer[$opDest] += (float)$op['montant'];
                     } else {
-                        $gains['meme_operateur'] += (float)$op['frais'];
+                        $gains['meme_operateur'] += $fraisTotal;
                     }
                 } else {
-                    $gains['meme_operateur'] += (float)$op['frais'];
+                    $gains['meme_operateur'] += $fraisTotal;
                 }
             }
         }
         
         return [
-            'gains' => $gains,
+            'gains'              => $gains,
             'montants_a_envoyer' => $montantsAEnvoyer
         ];
     }

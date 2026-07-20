@@ -9,7 +9,7 @@
                 </div>
                 
                 <div class="row mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card bg-light border-0 shadow-sm">
                             <div class="card-body text-center">
                                 <h6 class="text-muted mb-2">Gains sur notre réseau</h6>
@@ -17,11 +17,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card bg-light border-0 shadow-sm">
                             <div class="card-body text-center">
                                 <h6 class="text-muted mb-2">Gains inter-réseaux</h6>
                                 <h4 class="mb-0 text-success"><?= esc(number_format((float) ($details['gains']['autres_operateurs'] ?? 0), 0, ',', ' ')) ?> Ar</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Commissions perçues</h6>
+                                <h4 class="mb-0 text-warning"><?= esc(number_format((float) ($details['gains']['commissions'] ?? 0), 0, ',', ' ')) ?> Ar</h4>
                             </div>
                         </div>
                     </div>
@@ -43,6 +51,11 @@
                                     <td><?= esc(number_format((float) ($stat['total_frais'] ?? 0), 0, ',', ' ')) ?> Ariary</td>
                                 </tr>
                             <?php endforeach; ?>
+                            <tr class="table-warning fw-bold">
+                                <td>Commissions (transferts inter-réseaux)</td>
+                                <td>—</td>
+                                <td><?= esc(number_format((float) ($details['gains']['commissions'] ?? 0), 0, ',', ' ')) ?> Ariary</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
