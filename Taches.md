@@ -140,14 +140,78 @@
 
 ## 004177
 
+## 004177
+
 - [] Création de l'interface utilisateur.
+    - [] Création du template principal (header, navbar, footer).
+    - [] Intégration de Bootstrap.
+    - [] Mise en place de la navigation.
+    - [] Création d'une interface responsive.
+    - [] Amélioration de l'expérience utilisateur (UI/UX).
+
 - [] Configuration des préfixes de l'opérateur.
+    - [] Interface d'affichage des préfixes.
+    - [] Formulaire d'ajout d'un préfixe.
+    - [] Formulaire de modification d'un préfixe.
+    - [] Bouton de suppression d'un préfixe.
+    - [] Validation des formulaires.
+    - [] Affichage des messages de succès et d'erreur.
+
 - [] Gestion des dépôts.
+    - [] Interface de dépôt.
+    - [] Saisie du numéro de téléphone.
+    - [] Saisie du montant.
+    - [] Affichage automatique des frais.
+    - [] Validation des données saisies.
+    - [] Confirmation de l'opération.
+    - [] Affichage du résultat de l'opération.
+
 - [] Gestion des retraits.
+    - [] Interface de retrait.
+    - [] Saisie du numéro de téléphone.
+    - [] Saisie du montant.
+    - [] Affichage automatique des frais.
+    - [] Vérification visuelle du solde.
+    - [] Validation des données saisies.
+    - [] Confirmation de l'opération.
+    - [] Affichage du résultat de l'opération.
+
 - [] Gestion des transferts.
+    - [] Interface de transfert.
+    - [] Saisie du numéro de l'expéditeur.
+    - [] Saisie du numéro du destinataire.
+    - [] Saisie du montant.
+    - [] Affichage automatique des frais.
+    - [] Validation des données saisies.
+    - [] Confirmation du transfert.
+    - [] Affichage du résultat du transfert.
+
 - [] Affichage du solde.
+    - [] Création de la page d'accueil client.
+    - [] Affichage du numéro de téléphone connecté.
+    - [] Affichage du solde actuel.
+    - [] Actualisation du solde après chaque opération.
+
 - [] Historique des opérations.
+    - [] Création de la page historique.
+    - [] Affichage de la liste des opérations.
+    - [] Affichage du type d'opération.
+    - [] Affichage du montant.
+    - [] Affichage des frais.
+    - [] Affichage de la date de l'opération.
+    - [] Affichage du destinataire (pour les transferts).
+
 - [] Tests et corrections.
+    - [] Vérification des interfaces.
+    - [] Vérification de la navigation.
+    - [] Vérification de l'affichage responsive.
+    - [] Correction des erreurs d'affichage.
+    - [] Correction des erreurs de validation.
+    - [] Tests des scénarios de dépôt.
+    - [] Tests des scénarios de retrait.
+    - [] Tests des scénarios de transfert.
+    - [] Vérification de l'historique.
+    - [] Validation finale avant livraison.
 
 ---
 
