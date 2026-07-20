@@ -116,7 +116,7 @@ class OperationModel extends Model
             'total'              => 0,
             'meme_operateur'     => 0,
             'autres_operateurs'  => 0,
-            'commissions'        => 0,
+            'commissions'        => 0,  // Commissions reçues (transferts entrants d'autres réseaux)
             'par_type'           => []
         ];
         
@@ -128,6 +128,7 @@ class OperationModel extends Model
             
             $opClient = $this->getOperateurParTelephone($client['telephone']);
             
+            // ---- CAS 1 : Le client expéditeur appartient à l'opérateur courant ----
             if ($opClient === $operateurCourant) {
                 $fraisTotal = (float)$op['frais']; // frais_fixe + commission payés par le client
                 
@@ -135,23 +136,20 @@ class OperationModel extends Model
                     $opDest = $this->getOperateurParTelephone($op['destinataire']);
                     
                     if ($opDest && $opDest !== $operateurCourant) {
-                        // Recalculer les parts : commission = (montant + frais_fixe) × taux%
+                        // Transfert SORTANT vers un autre opérateur
+                        // L'opérateur source garde seulement les frais fixes
                         $bareme = $baremeModel->rechercherBaremeSelonMontant(3, (float)$op['montant'], $operateurCourant);
                         $fraisFixe = $bareme ? (float)$bareme['frais'] : 0.0;
                         $tauxCommission = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
                         $commission = ((float)$op['montant'] + $fraisFixe) * $tauxCommission / 100;
                         
-                        // L'opérateur source garde seulement les frais fixes
-                        $gainSource = $fraisFixe;
-                        
-                        $gains['total']              += $gainSource;
-                        $gains['autres_operateurs']  += $gainSource;
-                        $gains['commissions']         += $commission;
+                        $gains['total']             += $fraisFixe;
+                        $gains['autres_operateurs'] += $fraisFixe;
                         
                         if (!isset($gains['par_type'][$op['type_operation']])) {
                             $gains['par_type'][$op['type_operation']] = 0;
                         }
-                        $gains['par_type'][$op['type_operation']] += $gainSource;
+                        $gains['par_type'][$op['type_operation']] += $fraisFixe;
                         
                         // Tracker la commission due à l'opérateur destinataire
                         if (!isset($montantsAEnvoyer[$opDest])) {
@@ -177,6 +175,22 @@ class OperationModel extends Model
                         $gains['par_type'][$op['type_operation']] = 0;
                     }
                     $gains['par_type'][$op['type_operation']] += $fraisTotal;
+                }
+            }
+            
+            // ---- CAS 2 : Transfert ENTRANT vers un client de l'opérateur courant ----
+            // L'expéditeur est d'un autre réseau → la commission revient à l'opérateur courant
+            if ($op['destinataire'] && $opClient !== $operateurCourant) {
+                $opDest = $this->getOperateurParTelephone($op['destinataire']);
+                if ($opDest === $operateurCourant) {
+                    // Calculer la commission perçue (basée sur le barème de l'opérateur source)
+                    $bareme = $baremeModel->rechercherBaremeSelonMontant(3, (float)$op['montant'], $opClient ?? 'yas');
+                    $fraisFixe = $bareme ? (float)$bareme['frais'] : 0.0;
+                    $tauxCommission = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
+                    $commissionRecue = ((float)$op['montant'] + $fraisFixe) * $tauxCommission / 100;
+                    
+                    $gains['commissions'] += $commissionRecue;
+                    $gains['total']       += $commissionRecue;
                 }
             }
         }
