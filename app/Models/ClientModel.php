@@ -31,6 +31,34 @@ class ClientModel extends Model
         return $this->where('telephone', $this->normaliserTelephone($telephone))->first();
     }
 
+    public function trouverOuCreerClient(string $telephone): ?array
+    {
+        $telephoneNormalise = $this->normaliserTelephone($telephone);
+
+        if (!$this->db->tableExists($this->table)) {
+            $this->db->query(
+                "CREATE TABLE IF NOT EXISTS {$this->table} (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    telephone VARCHAR(20) NOT NULL UNIQUE,
+                    solde DECIMAL(12,2) NOT NULL DEFAULT 0.00
+                )"
+            );
+        }
+
+        $client = $this->where('telephone', $telephoneNormalise)->first();
+
+        if ($client) {
+            return $client;
+        }
+
+        $id = $this->insert([
+            'telephone' => $telephoneNormalise,
+            'solde' => 0,
+        ]);
+
+        return $id ? $this->find($id) : null;
+    }
+
     public function creerClientAutomatiquement(string $telephone): int
     {
         return $this->insert([

@@ -26,7 +26,7 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'database'     => WRITEPATH . 'database.sqlite3',
+        'database'     => '',
         'DBDriver'     => 'SQLite3',
         'DBPrefix'     => '',
         'pConnect'     => false,
@@ -190,6 +190,9 @@ class Database extends Config
     public function __construct()
     {
         parent::__construct();
+
+        $rootPath = defined('ROOTPATH') ? ROOTPATH : dirname(__DIR__, 2) . DIRECTORY_SEPARATOR;
+        $this->default['database'] = $rootPath . 'writable' . DIRECTORY_SEPARATOR . 'database.sqlite3';
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that

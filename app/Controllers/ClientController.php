@@ -25,9 +25,9 @@ class ClientController extends Controller
             $telephoneNormalise = preg_replace('/\D+/', '', trim($telephone));
 
             if ($telephoneNormalise !== '') {
-                $client = $this->clientModel->chercherClientParNumero($telephoneNormalise);
+                $client = $this->clientModel->trouverOuCreerClient($telephoneNormalise);
                 if (!$client) {
-                    session()->setFlashdata('error', 'Ce numéro n’est pas encore enregistré. Veuillez saisir un numéro existant.');
+                    session()->setFlashdata('error', 'Le compte n’a pas pu être créé. Veuillez réessayer.');
                     return view('client/login');
                 }
 
