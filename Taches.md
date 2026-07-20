@@ -307,26 +307,26 @@
 
 ## 004177
 
-- [] Mise à jour des vues.
-    - [] prefixes.php :
-        - [] ajout du champ opérateur.
-    - [] baremes_frais.php :
-        - [] ajout du champ commission supplémentaire.
-    - [] transfert.php :
-        - [] option « Inclure les frais de retrait ».
-        - [] transfert vers plusieurs numéros.
-        - [] partage automatique du montant entre les destinataires.
-    - [] situation_gains.php :
-        - [] séparation des gains entre notre opérateur et les autres opérateurs.
-    - [] situation_comptes.php :
-        - [] affichage des montants à envoyer à chaque opérateur.
+- [x] Mise à jour des vues.
+    - [x] prefixes.php :
+        - [x] ajout du champ opérateur.
+    - [x] baremes_frais.php :
+        - [x] ajout du champ commission supplémentaire.
+    - [x] transfert.php :
+        - [x] option « Inclure les frais de retrait ».
+        - [x] transfert vers plusieurs numéros.
+        - [x] partage automatique du montant entre les destinataires.
+    - [x] situation_gains.php :
+        - [x] séparation des gains entre notre opérateur et les autres opérateurs.
+    - [x] situation_comptes.php :
+        - [x] affichage des montants à envoyer à chaque opérateur.
 
-- [] Tests et corrections.
-    - [] test des transferts vers les autres opérateurs.
-    - [] test du calcul des commissions.
-    - [] test des transferts multiples.
-    - [] correction des erreurs détectées.
-    - [] mise à jour du fichier Taches.md.
+- [x] Tests et corrections.
+    - [x] test des transferts vers les autres opérateurs.
+    - [x] test du calcul des commissions.
+    - [x] test des transferts multiples.
+    - [x] correction des erreurs détectées.
+    - [x] mise à jour du fichier Taches.md.
 
 ---
 

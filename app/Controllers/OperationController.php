@@ -96,30 +96,53 @@ class OperationController extends Controller
             return redirect()->to('/login');
         }
 
-        $montant = $this->request->getPost('montant');
-        $destinataire = $this->request->getPost('destinataire');
-        if ($montant !== null && $destinataire) {
+        $montantTotal = $this->request->getPost('montant');
+        $destinatairesInput = $this->request->getPost('destinataire');
+        $inclureFraisRetrait = $this->request->getPost('inclure_frais_retrait') ? true : false;
+        
+        if ($montantTotal !== null && $destinatairesInput) {
             $client = $this->clientModel->find($clientId);
             $opClient = $this->operationModel->getOperateurParTelephone($client['telephone']) ?? 'yas';
-            $bareme = $this->baremeModel->rechercherBaremeSelonMontant(3, (float) $montant, $opClient);
-            $frais = $bareme ? (float)$bareme['frais'] : 0.0;
             
-            $opDest = $this->operationModel->getOperateurParTelephone($destinataire);
-            if ($opDest && $opDest !== $opClient) {
-                $commissionAutre = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
-                $frais += ((float)$montant * $commissionAutre / 100);
+            $destinatairesList = preg_split('/[\s,;]+/', trim($destinatairesInput));
+            $destinatairesList = array_filter($destinatairesList);
+            $nbDestinataires = count($destinatairesList);
+            
+            if ($nbDestinataires > 0) {
+                $montantParDestinataire = (float)$montantTotal / $nbDestinataires;
+                $soldeActuel = (float)$client['solde'];
+                
+                foreach ($destinatairesList as $destinataire) {
+                    $montantATransferer = $montantParDestinataire;
+                    
+                    if ($inclureFraisRetrait) {
+                        $fraisRetraitInclus = $this->baremeModel->rechercherFraisSelonMontant(2, $montantParDestinataire, $opClient);
+                        $montantATransferer += $fraisRetraitInclus;
+                    }
+                    
+                    $bareme = $this->baremeModel->rechercherBaremeSelonMontant(3, $montantATransferer, $opClient);
+                    $fraisTransfert = $bareme ? (float)$bareme['frais'] : 0.0;
+                    
+                    $opDest = $this->operationModel->getOperateurParTelephone($destinataire);
+                    if ($opDest && $opDest !== $opClient) {
+                        $commissionAutre = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
+                        $fraisTransfert += ($montantATransferer * $commissionAutre / 100);
+                    }
+                    
+                    $soldeActuel -= ($montantATransferer + $fraisTransfert);
+                    
+                    $this->operationModel->enregistrerOperation([
+                        'client_id' => $clientId,
+                        'type_operation_id' => 3,
+                        'destinataire' => $destinataire,
+                        'montant' => $montantATransferer,
+                        'frais' => $fraisTransfert,
+                        'date_operation' => date('Y-m-d H:i:s'),
+                    ]);
+                }
+                
+                $this->clientModel->modifierSolde($clientId, $soldeActuel);
             }
-            
-            $nouveauSolde = (float) $client['solde'] - (float) $montant - (float) $frais;
-            $this->clientModel->modifierSolde($clientId, $nouveauSolde);
-            $this->operationModel->enregistrerOperation([
-                'client_id' => $clientId,
-                'type_operation_id' => 3,
-                'destinataire' => $destinataire,
-                'montant' => $montant,
-                'frais' => $frais,
-                'date_operation' => date('Y-m-d H:i:s'),
-            ]);
         }
 
         return view('operations/transfert');

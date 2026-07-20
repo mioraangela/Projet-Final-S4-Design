@@ -6,11 +6,19 @@
                 <h1 class="h4 mb-3">Gestion des préfixes</h1>
                 <p class="text-muted mb-4">Ajoutez les préfixes téléphoniques pris en charge par le service.</p>
                 <form method="post" action="/prefixes/ajouter" class="row g-3">
-                    <div class="col-md-8">
+                    <div class="col-md-5">
                         <label for="prefixe" class="form-label">Préfixe</label>
                         <input type="text" class="form-control" id="prefixe" name="prefixe" placeholder="Ex. 034 ou +26134" required>
                     </div>
-                    <div class="col-md-4 d-flex align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label">Opérateur</label>
+                        <select class="form-select" name="operateur" required>
+                            <option value="yas">Yas</option>
+                            <option value="orange">Orange</option>
+                            <option value="airtel">Airtel</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100">Ajouter</button>
                     </div>
                 </form>
@@ -25,6 +33,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Préfixe</th>
+                                <th>Opérateur</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -32,6 +41,7 @@
                             <?php foreach ($prefixes as $prefixe): ?>
                                 <tr>
                                     <td><?= esc($prefixe['prefixe']) ?></td>
+                                    <td><?= esc(ucfirst($prefixe['operateur'] ?? 'Yas')) ?></td>
                                     <td>
                                         <a href="/prefixes/supprimer/<?= esc($prefixe['id']) ?>" class="btn btn-sm btn-outline-danger">Supprimer</a>
                                     </td>

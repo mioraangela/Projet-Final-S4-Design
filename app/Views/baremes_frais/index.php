@@ -6,7 +6,7 @@
                 <h1 class="h4 mb-3">Barèmes de frais</h1>
                 <p class="text-muted mb-4">Ajoutez un nouveau barème pour un type d’opération donné.</p>
                 <form method="post" action="/baremes-frais/ajouter" class="row g-3">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label">Type d’opération</label>
                         <select class="form-select" name="type_operation_id" required>
                             <option value="">Choisir</option>
@@ -27,8 +27,12 @@
                         <label class="form-label">Frais</label>
                         <input type="number" class="form-control" name="frais" min="0" step="0.01" required>
                     </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">Ajouter le barème</button>
+                    <div class="col-md-2">
+                        <label class="form-label" title="Commission supplémentaire vers un autre opérateur (%)">Comm. ext (%)</label>
+                        <input type="number" class="form-control" name="commission_autre_operateur" min="0" step="0.01" value="0" required>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Ajouter</button>
                     </div>
                 </form>
             </div>
@@ -45,6 +49,7 @@
                                 <th>Montant min</th>
                                 <th>Montant max</th>
                                 <th>Frais</th>
+                                <th>Comm. ext (%)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,6 +59,7 @@
                                     <td><?= esc(number_format((float) ($bareme['montant_minimum'] ?? 0), 0, ',', ' ')) ?> Ariary</td>
                                     <td><?= esc(number_format((float) ($bareme['montant_maximum'] ?? 0), 0, ',', ' ')) ?> Ariary</td>
                                     <td><?= esc(number_format((float) ($bareme['frais'] ?? 0), 0, ',', ' ')) ?> Ariary</td>
+                                    <td><?= esc(number_format((float) ($bareme['commission_autre_operateur'] ?? 0), 2, ',', ' ')) ?> %</td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

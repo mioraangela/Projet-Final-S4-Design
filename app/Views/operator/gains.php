@@ -7,6 +7,25 @@
                 <div class="alert alert-success">
                     Total des frais collectés : <strong><?= esc(number_format((float) ($gains ?? 0), 0, ',', ' ')) ?> Ariary</strong>
                 </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Gains sur notre réseau</h6>
+                                <h4 class="mb-0 text-primary"><?= esc(number_format((float) ($details['gains']['meme_operateur'] ?? 0), 0, ',', ' ')) ?> Ar</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-2">Gains inter-réseaux</h6>
+                                <h4 class="mb-0 text-success"><?= esc(number_format((float) ($details['gains']['autres_operateurs'] ?? 0), 0, ',', ' ')) ?> Ar</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle">
                         <thead class="table-light">
