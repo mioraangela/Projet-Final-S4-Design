@@ -22,16 +22,20 @@ class ClientController extends Controller
         $telephone = $this->request->getPost('telephone');
 
         if ($telephone) {
-            $client = $this->clientModel->chercherClientParNumero($telephone);
-            if (!$client) {
-                $this->clientModel->creerClientAutomatiquement($telephone);
-                $client = $this->clientModel->chercherClientParNumero($telephone);
-            }
+            $telephoneNormalise = preg_replace('/\D+/', '', trim($telephone));
 
-            session()->set('client_id', $client['id']);
-            session()->set('telephone', $client['telephone']);
-            session()->set('role', 'client');
-            return redirect()->to('/accueil');
+            if ($telephoneNormalise !== '') {
+                $client = $this->clientModel->chercherClientParNumero($telephoneNormalise);
+                if (!$client) {
+                    $this->clientModel->creerClientAutomatiquement($telephoneNormalise);
+                    $client = $this->clientModel->chercherClientParNumero($telephoneNormalise);
+                }
+
+                session()->set('client_id', $client['id']);
+                session()->set('telephone', $client['telephone']);
+                session()->set('role', 'client');
+                return redirect()->to('/accueil');
+            }
         }
 
         return view('client/login');

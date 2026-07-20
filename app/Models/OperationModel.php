@@ -31,8 +31,10 @@ class OperationModel extends Model
 
     public function getHistoriqueClient(int $clientId): array
     {
-        return $this->where('client_id', $clientId)
-            ->orderBy('date_operation', 'DESC')
+        return $this->select('operations.*, types_operation.nom as type_operation')
+            ->join('types_operation', 'types_operation.id = operations.type_operation_id', 'left')
+            ->where('operations.client_id', $clientId)
+            ->orderBy('operations.date_operation', 'DESC')
             ->findAll();
     }
 

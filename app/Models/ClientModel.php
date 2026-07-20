@@ -21,15 +21,20 @@ class ClientModel extends Model
 
     protected $skipValidation = false;
 
+    protected function normaliserTelephone(string $telephone): string
+    {
+        return preg_replace('/\D+/', '', trim($telephone));
+    }
+
     public function chercherClientParNumero(string $telephone): ?array
     {
-        return $this->where('telephone', trim($telephone))->first();
+        return $this->where('telephone', $this->normaliserTelephone($telephone))->first();
     }
 
     public function creerClientAutomatiquement(string $telephone): int
     {
         return $this->insert([
-            'telephone' => trim($telephone),
+            'telephone' => $this->normaliserTelephone($telephone),
             'solde' => 0,
         ]);
     }

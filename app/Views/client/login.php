@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Connexion Mobile Money</title>
-</head>
-<body>
-    <h1>Connexion</h1>
-    <form method="post" action="/login">
-        <label for="telephone">Numéro de téléphone</label>
-        <input type="text" name="telephone" id="telephone" required>
-        <button type="submit">Se connecter</button>
-    </form>
-</body>
-</html>
+<?= $this->include('partials/header') ?>
+<div class="row justify-content-center py-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <h1 class="h3 mb-2">Connexion à votre compte</h1>
+                    <p class="text-muted mb-0">Saisissez votre numéro de téléphone pour accéder à votre espace mobile money.</p>
+                </div>
+                <form method="post" action="/login">
+                    <div class="mb-3">
+                        <label for="telephone" class="form-label">Numéro de téléphone</label>
+                        <input type="text" class="form-control" name="telephone" id="telephone" placeholder="033 12 345 67" required>
+                        <div class="form-text">Exemple : 033 12 345 67</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?= $this->include('partials/footer') ?>
