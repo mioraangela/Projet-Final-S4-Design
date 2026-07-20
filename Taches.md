@@ -280,30 +280,30 @@
 
 ## 004022
 
-- [] Modification de la base de données.
-    - [] ajout de la colonne opérateur dans la table prefixes.
-    - [] ajout de la colonne commission_autre_operateur dans la table baremes_frais.
+- [x] Modification de la base de données.
+    - [x] ajout de la colonne opérateur dans la table prefixes.
+    - [x] ajout de la colonne commission_autre_operateur dans la table baremes_frais.
 
-- [] Mise à jour des modèles.
-    - [] PrefixeModel :
-        - [] gestion des préfixes des autres opérateurs.
-    - [] BaremeFraisModel :
-        - [] gestion du pourcentage de commission supplémentaire.
-    - [] OperationModel :
-        - [] calcul des frais pour un transfert vers un autre opérateur.
-        - [] calcul des gains de notre opérateur.
-        - [] calcul des montants à envoyer aux autres opérateurs.
+- [x] Mise à jour des modèles.
+    - [x] PrefixeModel :
+        - [x] gestion des préfixes des autres opérateurs.
+    - [x] BaremeFraisModel :
+        - [x] gestion du pourcentage de commission supplémentaire.
+    - [x] OperationModel :
+        - [x] calcul des frais pour un transfert vers un autre opérateur.
+        - [x] calcul des gains de notre opérateur.
+        - [x] calcul des montants à envoyer aux autres opérateurs.
 
-- [] Mise à jour des contrôleurs.
-    - [] PrefixeController :
-        - [] ajout des préfixes des autres opérateurs.
-        - [] modification des préfixes.
-    - [] BaremeFraisController :
-        - [] gestion du pourcentage de commission supplémentaire.
-    - [] OperationController :
-        - [] calcul des frais selon l'opérateur du destinataire.
-        - [] affichage des gains par opérateur.
-        - [] affichage des montants à envoyer à chaque opérateur.
+- [x] Mise à jour des contrôleurs.
+    - [x] PrefixeController :
+        - [x] ajout des préfixes des autres opérateurs.
+        - [x] modification des préfixes.
+    - [x] BaremeFraisController :
+        - [x] gestion du pourcentage de commission supplémentaire.
+    - [x] OperationController :
+        - [x] calcul des frais selon l'opérateur du destinataire.
+        - [x] affichage des gains par opérateur.
+        - [x] affichage des montants à envoyer à chaque opérateur.
 
 ## 004177
 

@@ -68,7 +68,8 @@ class OperationController extends Controller
         $montant = $this->request->getPost('montant');
         if ($montant !== null) {
             $client = $this->clientModel->find($clientId);
-            $frais = $this->baremeModel->rechercherFraisSelonMontant(2, (float) $montant);
+            $opClient = $this->operationModel->getOperateurParTelephone($client['telephone']) ?? 'yas';
+            $frais = $this->baremeModel->rechercherFraisSelonMontant(2, (float) $montant, $opClient);
             $nouveauSolde = (float) $client['solde'] - (float) $montant - (float) $frais;
             $this->clientModel->modifierSolde($clientId, $nouveauSolde);
             $this->operationModel->enregistrerOperation([
@@ -99,7 +100,16 @@ class OperationController extends Controller
         $destinataire = $this->request->getPost('destinataire');
         if ($montant !== null && $destinataire) {
             $client = $this->clientModel->find($clientId);
-            $frais = $this->baremeModel->rechercherFraisSelonMontant(3, (float) $montant);
+            $opClient = $this->operationModel->getOperateurParTelephone($client['telephone']) ?? 'yas';
+            $bareme = $this->baremeModel->rechercherBaremeSelonMontant(3, (float) $montant, $opClient);
+            $frais = $bareme ? (float)$bareme['frais'] : 0.0;
+            
+            $opDest = $this->operationModel->getOperateurParTelephone($destinataire);
+            if ($opDest && $opDest !== $opClient) {
+                $commissionAutre = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
+                $frais += ((float)$montant * $commissionAutre / 100);
+            }
+            
             $nouveauSolde = (float) $client['solde'] - (float) $montant - (float) $frais;
             $this->clientModel->modifierSolde($clientId, $nouveauSolde);
             $this->operationModel->enregistrerOperation([

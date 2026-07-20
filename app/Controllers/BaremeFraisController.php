@@ -28,7 +28,8 @@ class BaremeFraisController extends Controller
             return redirect()->to('/operator/login');
         }
 
-        $baremes = $this->baremeModel->getBaremes();
+        $operateur = session('operator_network') ?? 'yas';
+        $baremes = $this->baremeModel->getBaremes($operateur);
         $types = $this->typeOperationModel->getTypesOperations();
         return view('baremes_frais/index', ['baremes' => $baremes, 'types' => $types]);
     }
@@ -41,6 +42,7 @@ class BaremeFraisController extends Controller
 
         $data = $this->request->getPost();
         if ($data) {
+            $data['operateur'] = session('operator_network') ?? 'yas';
             $this->baremeModel->ajouterBareme($data);
         }
         return redirect()->to('/baremes-frais');
@@ -54,6 +56,7 @@ class BaremeFraisController extends Controller
 
         $data = $this->request->getPost();
         if ($data) {
+            $data['operateur'] = session('operator_network') ?? 'yas';
             $this->baremeModel->modifierBareme($id, $data);
         }
         return redirect()->to('/baremes-frais');

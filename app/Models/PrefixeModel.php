@@ -12,10 +12,11 @@ class PrefixeModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
 
-    protected $allowedFields = ['prefixe'];
+    protected $allowedFields = ['prefixe', 'operateur'];
 
     protected $validationRules = [
         'prefixe' => 'required|string|max_length[20]|is_unique[prefixes.prefixe,id,{id}]',
+        'operateur' => 'required|string|max_length[50]',
     ];
 
     protected $validationMessages = [];
@@ -24,6 +25,10 @@ class PrefixeModel extends Model
     protected function initialiserSchema(): void
     {
         if ($this->db->tableExists($this->table)) {
+            $fields = $this->db->getFieldNames($this->table);
+            if (!in_array('operateur', $fields)) {
+                $this->db->query("ALTER TABLE {$this->table} ADD COLUMN operateur VARCHAR(50) DEFAULT 'yas'");
+            }
             if ($this->countAllResults() > 0) {
                 return;
             }
@@ -31,14 +36,20 @@ class PrefixeModel extends Model
             $this->db->query(
                 "CREATE TABLE IF NOT EXISTS {$this->table} (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    prefixe VARCHAR(20) NOT NULL UNIQUE
+                    prefixe VARCHAR(20) NOT NULL UNIQUE,
+                    operateur VARCHAR(50) NOT NULL
                 )"
             );
         }
 
-        $prefixes = ['032', '033', '034', '035', '037', '038', '+26132', '+26133', '+26134', '+26135', '+26137', '+26138'];
-        foreach ($prefixes as $prefixe) {
-            $this->insert(['prefixe' => $prefixe]);
+        $prefixes = [
+            '032' => 'orange', '033' => 'airtel', '034' => 'yas', 
+            '035' => 'airtel', '037' => 'orange', '038' => 'yas', 
+            '+26132' => 'orange', '+26133' => 'airtel', '+26134' => 'yas', 
+            '+26135' => 'airtel', '+26137' => 'orange', '+26138' => 'yas'
+        ];
+        foreach ($prefixes as $prefixe => $op) {
+            $this->insert(['prefixe' => $prefixe, 'operateur' => $op]);
         }
     }
 
@@ -49,18 +60,20 @@ class PrefixeModel extends Model
             ->findAll();
     }
 
-    public function ajouterPrefixe(string $prefixe): int
+    public function ajouterPrefixe(string $prefixe, string $operateur = 'yas'): int
     {
         $this->initialiserSchema();
         return $this->insert([
             'prefixe' => trim($prefixe),
+            'operateur' => trim($operateur),
         ]);
     }
 
-    public function modifierPrefixe(int $id, string $prefixe): bool
+    public function modifierPrefixe(int $id, string $prefixe, string $operateur = 'yas'): bool
     {
         return $this->update($id, [
             'prefixe' => trim($prefixe),
+            'operateur' => trim($operateur),
         ]);
     }
 

@@ -36,8 +36,12 @@ class PrefixeController extends Controller
         }
 
         $prefixe = $this->request->getPost('prefixe');
+        $operateur = $this->request->getPost('operateur');
+        if (!$operateur) {
+            $operateur = session('operator_network') ?? 'yas';
+        }
         if ($prefixe) {
-            $this->prefixeModel->ajouterPrefixe($prefixe);
+            $this->prefixeModel->ajouterPrefixe($prefixe, $operateur);
         }
         return redirect()->to('/prefixes');
     }
@@ -49,8 +53,12 @@ class PrefixeController extends Controller
         }
 
         $prefixe = $this->request->getPost('prefixe');
+        $operateur = $this->request->getPost('operateur');
+        if (!$operateur) {
+            $operateur = session('operator_network') ?? 'yas';
+        }
         if ($prefixe) {
-            $this->prefixeModel->modifierPrefixe($id, $prefixe);
+            $this->prefixeModel->modifierPrefixe($id, $prefixe, $operateur);
         }
         return redirect()->to('/prefixes');
     }

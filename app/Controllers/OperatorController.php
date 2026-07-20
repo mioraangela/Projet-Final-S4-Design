@@ -51,10 +51,15 @@ class OperatorController extends Controller
         }
 
         $operationModel = new OperationModel();
-        $stats = $operationModel->getGainsParTypeOperation();
-        $total = $operationModel->calculerGainsOperateur();
+        $operateurCourant = session('operator_network') ?? 'yas';
+        $details = $operationModel->getGainsDetail($operateurCourant);
+        
+        $stats = [];
+        foreach ($details['gains']['par_type'] as $nom => $montant) {
+            $stats[] = ['nom' => $nom, 'nombre_transactions' => '-', 'total_frais' => $montant];
+        }
 
-        return view('operator/gains', ['stats' => $stats, 'gains' => $total]);
+        return view('operator/gains', ['stats' => $stats, 'gains' => $details['gains']['total'], 'details' => $details]);
     }
 
     public function comptes()
@@ -64,9 +69,21 @@ class OperatorController extends Controller
         }
 
         $clientModel = new ClientModel();
-        $clients = $clientModel->findAll();
+        $operationModel = new OperationModel();
+        $operateurCourant = session('operator_network') ?? 'yas';
+        
+        $allClients = $clientModel->findAll();
+        $clients = [];
+        foreach ($allClients as $client) {
+            $op = $operationModel->getOperateurParTelephone($client['telephone']);
+            if ($op === $operateurCourant) {
+                $clients[] = $client;
+            }
+        }
+        
+        $details = $operationModel->getGainsDetail($operateurCourant);
 
-        return view('operator/comptes', ['clients' => $clients]);
+        return view('operator/comptes', ['clients' => $clients, 'montants_a_envoyer' => $details['montants_a_envoyer']]);
     }
 
     public function detailCompte($id)

@@ -91,18 +91,69 @@ class OperationModel extends Model
         return $rows;
     }
 
-    public function calculerGainsOperateur(): float
+    public function getOperateurParTelephone(string $telephone): ?string
     {
-        $rows = $this->selectSum('frais')->first();
-        return (float) ($rows['frais'] ?? 0);
+        $this->initialiserSchema();
+        $prefixes = $this->db->table('prefixes')->orderBy('LENGTH(prefixe)', 'DESC')->get()->getResultArray();
+        foreach ($prefixes as $p) {
+            if (strpos($telephone, $p['prefixe']) === 0) {
+                return $p['operateur'];
+            }
+        }
+        return null;
     }
 
-    public function getGainsParTypeOperation(): array
+    public function getGainsDetail(string $operateurCourant): array
     {
-        return $this->select('operations.type_operation_id, types_operation.nom, SUM(operations.frais) as total_frais, COUNT(operations.id) as nombre_transactions')
+        $this->initialiserSchema();
+        $operations = $this->select('operations.*, types_operation.nom as type_operation')
             ->join('types_operation', 'types_operation.id = operations.type_operation_id', 'left')
-            ->groupBy('operations.type_operation_id, types_operation.nom')
-            ->orderBy('types_operation.nom', 'ASC')
             ->findAll();
+
+        $gains = [
+            'total' => 0,
+            'meme_operateur' => 0,
+            'autres_operateurs' => 0,
+            'par_type' => []
+        ];
+        
+        $montantsAEnvoyer = [];
+
+        foreach ($operations as $op) {
+            $client = $this->db->table('clients')->where('id', $op['client_id'])->get()->getRowArray();
+            if (!$client) continue;
+            
+            $opClient = $this->getOperateurParTelephone($client['telephone']);
+            
+            if ($opClient === $operateurCourant) {
+                $gains['total'] += (float)$op['frais'];
+                
+                if (!isset($gains['par_type'][$op['type_operation']])) {
+                    $gains['par_type'][$op['type_operation']] = 0;
+                }
+                $gains['par_type'][$op['type_operation']] += (float)$op['frais'];
+                
+                if ($op['destinataire']) {
+                    $opDest = $this->getOperateurParTelephone($op['destinataire']);
+                    if ($opDest && $opDest !== $operateurCourant) {
+                        $gains['autres_operateurs'] += (float)$op['frais'];
+                        
+                        if (!isset($montantsAEnvoyer[$opDest])) {
+                            $montantsAEnvoyer[$opDest] = 0;
+                        }
+                        $montantsAEnvoyer[$opDest] += (float)$op['montant'];
+                    } else {
+                        $gains['meme_operateur'] += (float)$op['frais'];
+                    }
+                } else {
+                    $gains['meme_operateur'] += (float)$op['frais'];
+                }
+            }
+        }
+        
+        return [
+            'gains' => $gains,
+            'montants_a_envoyer' => $montantsAEnvoyer
+        ];
     }
 }
