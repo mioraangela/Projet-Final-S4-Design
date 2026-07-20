@@ -116,28 +116,36 @@ class OperationController extends Controller
                     $montantATransferer = $montantParDestinataire;
                     
                     if ($inclureFraisRetrait) {
-                        $fraisRetraitInclus = $this->baremeModel->rechercherFraisSelonMontant(2, $montantParDestinataire, $opClient);
-                        $montantATransferer += $fraisRetraitInclus;
+                        $fraisRetrait = $this->baremeModel->rechercherFraisSelonMontant(2, $montantParDestinataire, $opClient);
+                        $montantATransferer += $fraisRetrait;
                     }
                     
+                    // Frais fixes de transfert (reste chez l'opérateur source)
                     $bareme = $this->baremeModel->rechercherBaremeSelonMontant(3, $montantATransferer, $opClient);
-                    $fraisTransfert = $bareme ? (float)$bareme['frais'] : 0.0;
+                    $fraisFixe = $bareme ? (float)$bareme['frais'] : 0.0;
                     
+                    // Commission inter-opérateur = (montant + frais_fixe) × taux%
+                    // Elle est due à l'opérateur destinataire
+                    $commission = 0.0;
                     $opDest = $this->operationModel->getOperateurParTelephone($destinataire);
                     if ($opDest && $opDest !== $opClient) {
-                        $commissionAutre = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
-                        $fraisTransfert += ($montantATransferer * $commissionAutre / 100);
+                        $tauxCommission = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
+                        $commission = ($montantATransferer + $fraisFixe) * $tauxCommission / 100;
                     }
                     
-                    $soldeActuel -= ($montantATransferer + $fraisTransfert);
+                    // Total frais payés par le client = frais_fixe + commission
+                    $fraisTotal = $fraisFixe + $commission;
+                    
+                    // Débit client : montant + frais_fixe + commission
+                    $soldeActuel -= ($montantATransferer + $fraisTotal);
                     
                     $this->operationModel->enregistrerOperation([
-                        'client_id' => $clientId,
+                        'client_id'         => $clientId,
                         'type_operation_id' => 3,
-                        'destinataire' => $destinataire,
-                        'montant' => $montantATransferer,
-                        'frais' => $fraisTransfert,
-                        'date_operation' => date('Y-m-d H:i:s'),
+                        'destinataire'      => $destinataire,
+                        'montant'           => $montantATransferer,
+                        'frais'             => $fraisTotal,
+                        'date_operation'    => date('Y-m-d H:i:s'),
                     ]);
                 }
                 

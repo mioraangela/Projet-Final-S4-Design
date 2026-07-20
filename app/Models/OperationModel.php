@@ -129,34 +129,54 @@ class OperationModel extends Model
             $opClient = $this->getOperateurParTelephone($client['telephone']);
             
             if ($opClient === $operateurCourant) {
-                $fraisTotal = (float)$op['frais'];
-                $gains['total'] += $fraisTotal;
-                
-                if (!isset($gains['par_type'][$op['type_operation']])) {
-                    $gains['par_type'][$op['type_operation']] = 0;
-                }
-                $gains['par_type'][$op['type_operation']] += $fraisTotal;
+                $fraisTotal = (float)$op['frais']; // frais_fixe + commission payés par le client
                 
                 if ($op['destinataire']) {
                     $opDest = $this->getOperateurParTelephone($op['destinataire']);
+                    
                     if ($opDest && $opDest !== $operateurCourant) {
-                        // Calculer la part de commission inter-opérateur
+                        // Recalculer les parts : commission = (montant + frais_fixe) × taux%
                         $bareme = $baremeModel->rechercherBaremeSelonMontant(3, (float)$op['montant'], $operateurCourant);
+                        $fraisFixe = $bareme ? (float)$bareme['frais'] : 0.0;
                         $tauxCommission = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
-                        $commission = ((float)$op['montant'] * $tauxCommission / 100);
+                        $commission = ((float)$op['montant'] + $fraisFixe) * $tauxCommission / 100;
                         
-                        $gains['commissions']      += $commission;
-                        $gains['autres_operateurs'] += $fraisTotal;
+                        // L'opérateur source garde seulement les frais fixes
+                        $gainSource = $fraisFixe;
                         
+                        $gains['total']              += $gainSource;
+                        $gains['autres_operateurs']  += $gainSource;
+                        $gains['commissions']         += $commission;
+                        
+                        if (!isset($gains['par_type'][$op['type_operation']])) {
+                            $gains['par_type'][$op['type_operation']] = 0;
+                        }
+                        $gains['par_type'][$op['type_operation']] += $gainSource;
+                        
+                        // Tracker la commission due à l'opérateur destinataire
                         if (!isset($montantsAEnvoyer[$opDest])) {
                             $montantsAEnvoyer[$opDest] = 0;
                         }
-                        $montantsAEnvoyer[$opDest] += (float)$op['montant'];
+                        $montantsAEnvoyer[$opDest] += $commission;
                     } else {
+                        // Transfert interne : l'opérateur garde tous les frais
+                        $gains['total']          += $fraisTotal;
                         $gains['meme_operateur'] += $fraisTotal;
+                        
+                        if (!isset($gains['par_type'][$op['type_operation']])) {
+                            $gains['par_type'][$op['type_operation']] = 0;
+                        }
+                        $gains['par_type'][$op['type_operation']] += $fraisTotal;
                     }
                 } else {
+                    // Dépôt ou retrait : l'opérateur garde tous les frais
+                    $gains['total']          += $fraisTotal;
                     $gains['meme_operateur'] += $fraisTotal;
+                    
+                    if (!isset($gains['par_type'][$op['type_operation']])) {
+                        $gains['par_type'][$op['type_operation']] = 0;
+                    }
+                    $gains['par_type'][$op['type_operation']] += $fraisTotal;
                 }
             }
         }
