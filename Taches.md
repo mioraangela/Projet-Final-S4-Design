@@ -22,123 +22,135 @@
 ## 004022
 
 - [x] Création du projet CodeIgniter 4.
-- [] Configuration de SQLite.
-- [] Création de la base de données.
+- [x] Configuration de SQLite.
+- [x] Création de la base de données.
 
-- [] Création des tables.
-    - [] préfixes : id, préfixe.
-    - [] clients : id, téléphone, solde.
-    - [] types opération : id, nom.
-    - [] barèmes frais : id, id type opération, montant minimum, montant maximum, frais.
-    - [] opérations : id, id clients, id type opération, destinataire, montant, frais, date opération.
+- [x] Création des tables.
+    - [x] préfixes : id, préfixe.
+    - [x] clients : id, téléphone, solde.
+    - [x] types opération : id, nom.
+    - [x] barèmes frais : id, id type opération, montant minimum, montant maximum, frais.
+    - [x] opérations : id, id clients, id type opération, destinataire, montant, frais, date opération.
 
-- [] Création des modèles.
-    - [] PrefixeModel :
-        - [] récupérer les préfixes.
-        - [] ajouter un préfixe.
-        - [] modifier un préfixe.
-        - [] supprimer un préfixe.
+- [x] Création des modèles.
+    - [x] PrefixeModel :
+        - [x] récupérer les préfixes.
+        - [x] ajouter un préfixe.
+        - [x] modifier un préfixe.
+        - [x] supprimer un préfixe.
 
-    - [] ClientModel :
-        - [] rechercher un client par numéro.
-        - [] créer un client automatiquement.
-        - [] récupérer le solde.
-        - [] modifier le solde.
+    - [x] ClientModel :
+        - [x] rechercher un client par numéro.
+        - [x] créer un client automatiquement.
+        - [x] récupérer le solde.
+        - [x] modifier le solde.
 
-    - [] TypeOperationModel :
-        - [] récupérer les types d'opérations.
-        - [] ajouter un type d'opération.
-        - [] modifier un type d'opération.
-        - [] supprimer un type d'opération.
+    - [x] TypeOperationModel :
+        - [x] récupérer les types d'opérations.
+        - [x] ajouter un type d'opération.
+        - [x] modifier un type d'opération.
+        - [x] supprimer un type d'opération.
 
-    - [] BaremeFraisModel :
-        - [] récupérer les barèmes.
-        - [] ajouter un barème.
-        - [] modifier un barème.
-        - [] supprimer un barème.
-        - [] rechercher les frais selon le montant.
+    - [x] BaremeFraisModel :
+        - [x] récupérer les barèmes.
+        - [x] ajouter un barème.
+        - [x] modifier un barème.
+        - [x] supprimer un barème.
+        - [x] rechercher les frais selon le montant.
 
-    - [] OperationModel :
-        - [] enregistrer une opération.
-        - [] récupérer l'historique d'un client.
-        - [] calculer les gains de l'opérateur.
+    - [x] OperationModel :
+        - [x] enregistrer une opération.
+        - [x] récupérer l'historique d'un client.
+        - [x] calculer les gains de l'opérateur.
 
-- [] Création des contrôleurs.
-    - [] PrefixeController :
-        - [] afficher les préfixes.
-        - [] ajouter un préfixe.
-        - [] modifier un préfixe.
-        - [] supprimer un préfixe.
+- [x] Création des contrôleurs.
+    - [x] PrefixeController :
+        - [x] afficher les préfixes.
+        - [x] ajouter un préfixe.
+        - [x] modifier un préfixe.
+        - [x] supprimer un préfixe.
 
-    - [] ClientController :
-        - [] connexion automatique avec le numéro de téléphone.
-        - [] afficher le solde du client.
+    - [x] ClientController :
+        - [x] connexion automatique avec le numéro de téléphone.
+        - [x] afficher le solde du client.
+        - [x] créer automatiquement un client si le numéro n'existe pas.
 
-    - [] TypeOperationController :
-        - [] afficher les types d'opérations.
-        - [] ajouter un type d'opération.
-        - [] modifier un type d'opération.
-        - [] supprimer un type d'opération.
+    - [x] TypeOperationController :
+        - [x] afficher les types d'opérations.
+        - [x] ajouter un type d'opération.
+        - [x] modifier un type d'opération.
+        - [x] supprimer un type d'opération.
 
-    - [] BaremeFraisController :
-        - [] afficher les barèmes de frais.
-        - [] ajouter un barème.
-        - [] modifier un barème.
-        - [] supprimer un barème.
+    - [x] BaremeFraisController :
+        - [x] afficher les barèmes de frais.
+        - [x] ajouter un barème.
+        - [x] modifier un barème.
+        - [x] supprimer un barème.
 
-    - [] OperationController :
-        - [] effectuer un dépôt.
-        - [] effectuer un retrait.
-        - [] effectuer un transfert.
-        - [] afficher l'historique des opérations.
-        - [] afficher la situation des gains de l'opérateur.
-        - [] afficher la situation des comptes clients.
+    - [x] OperationController :
+        - [x] effectuer un dépôt.
+        - [x] effectuer un retrait.
+        - [x] effectuer un transfert.
+        - [x] afficher l'historique des opérations.
+        - [x] afficher la situation des gains de l'opérateur.
+        - [x] afficher la situation des comptes clients.
 
-- [] Création des vues.
-    - [] login.php :
-        - [] formulaire de connexion avec le numéro de téléphone.
+    - [x] OperatorController :
+        - [x] connexion opérateur.
+        - [x] accès au tableau de bord opérateur.
+        - [x] consultation des gains.
+        - [x] consultation des comptes clients.
 
-    - [] accueil.php :
-        - [] menu principal.
-        - [] affichage du numéro de téléphone.
-        - [] affichage du solde.
+- [x] Création des vues.
+    - [x] login.php :
+        - [x] formulaire de connexion avec le numéro de téléphone.
 
-    - [] prefixes.php :
-        - [] liste des préfixes.
-        - [] formulaire d'ajout.
-        - [] formulaire de modification.
+    - [x] accueil.php :
+        - [x] menu principal.
+        - [x] affichage du numéro de téléphone.
+        - [x] affichage du solde.
 
-    - [] types_operations.php :
-        - [] liste des types d'opérations.
-        - [] formulaire d'ajout.
-        - [] formulaire de modification.
+    - [x] prefixes.php :
+        - [x] liste des préfixes.
+        - [x] formulaire d'ajout.
+        - [x] formulaire de modification.
 
-    - [] baremes_frais.php :
-        - [] liste des barèmes de frais.
-        - [] formulaire d'ajout.
-        - [] formulaire de modification.
+    - [x] types_operations.php :
+        - [x] liste des types d'opérations.
+        - [x] formulaire d'ajout.
+        - [x] formulaire de modification.
 
-    - [] depot.php :
-        - [] formulaire de dépôt.
+    - [x] baremes_frais.php :
+        - [x] liste des barèmes de frais.
+        - [x] formulaire d'ajout.
+        - [x] formulaire de modification.
 
-    - [] retrait.php :
-        - [] formulaire de retrait.
+    - [x] depot.php :
+        - [x] formulaire de dépôt.
 
-    - [] transfert.php :
-        - [] formulaire de transfert.
+    - [x] retrait.php :
+        - [x] formulaire de retrait.
 
-    - [] historique.php :
-        - [] liste des opérations effectuées.
+    - [x] transfert.php :
+        - [x] formulaire de transfert.
 
-    - [] situation_gains.php :
-        - [] affichage des gains de l'opérateur.
+    - [x] historique.php :
+        - [x] liste des opérations effectuées.
 
-    - [] situation_comptes.php :
-        - [] liste des comptes clients avec leur solde.
-        
-- [] Gestion de la connexion automatique par numéro de téléphone.
+    - [x] situation_gains.php :
+        - [x] affichage des gains de l'opérateur.
 
-## 004177
+    - [x] situation_comptes.php :
+        - [x] liste des comptes clients avec leur solde.
+
+    - [x] operator/login.php :
+        - [x] formulaire de connexion opérateur.
+
+    - [x] operator/dashboard.php :
+        - [x] tableau de bord opérateur.
+
+- [x] Gestion de la connexion automatique par numéro de téléphone.
+- [x] Séparation des accès client/opérateur.
 
 ## 004177
 
