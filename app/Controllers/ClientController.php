@@ -56,6 +56,12 @@ class ClientController extends Controller
         return view('client/accueil', ['client' => $client]);
     }
 
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/login');
+    }
+
     public function solde()
     {
         if (session('role') !== 'client') {

@@ -25,8 +25,10 @@ class BaremeFraisModel extends Model
 
     public function getBaremes(): array
     {
-        return $this->orderBy('type_operation_id', 'ASC')
-            ->orderBy('montant_minimum', 'ASC')
+        return $this->select('baremes_frais.*, types_operation.nom as type_operation_nom')
+            ->join('types_operation', 'types_operation.id = baremes_frais.type_operation_id', 'left')
+            ->orderBy('baremes_frais.type_operation_id', 'ASC')
+            ->orderBy('baremes_frais.montant_minimum', 'ASC')
             ->findAll();
     }
 

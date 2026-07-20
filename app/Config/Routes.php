@@ -9,6 +9,7 @@ $routes->get('/', 'Home::index');
 
 $routes->get('/login', 'ClientController::login');
 $routes->post('/login', 'ClientController::login');
+$routes->get('/logout', 'ClientController::logout');
 $routes->get('/accueil', 'ClientController::accueil');
 $routes->get('/solde', 'ClientController::solde');
 
@@ -41,4 +42,5 @@ $routes->post('/operator/login', 'OperatorController::login');
 $routes->get('/operator/dashboard', 'OperatorController::dashboard');
 $routes->get('/operator/gains', 'OperatorController::gains');
 $routes->get('/operator/comptes', 'OperatorController::comptes');
+$routes->get('/operator/comptes/(:num)', 'OperatorController::detailCompte/$1');
 $routes->get('/operator/logout', 'OperatorController::logout');

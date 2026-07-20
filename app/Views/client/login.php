@@ -4,9 +4,12 @@
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
-                    <h1 class="h3 mb-2">Connexion à votre compte</h1>
-                    <p class="text-muted mb-0">Saisissez votre numéro de téléphone pour accéder à votre espace mobile money.</p>
+                    <h1 class="h3 mb-2">Connexion client</h1>
+                    <p class="text-muted mb-0">Saisissez votre numéro de téléphone pour accéder à votre espace AriaryPay.</p>
                 </div>
+                <?php if (session()->getFlashdata('error')): ?>
+                    <div class="alert alert-danger"><?= esc(session()->getFlashdata('error')) ?></div>
+                <?php endif; ?>
                 <form method="post" action="/login">
                     <div class="mb-3">
                         <label for="telephone" class="form-label">Numéro de téléphone</label>

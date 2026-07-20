@@ -8,6 +8,7 @@
                         <h1 class="h4 mb-1">Bienvenue sur votre espace AriaryPay</h1>
                         <p class="text-muted mb-0">Gérez votre compte facilement depuis votre téléphone.</p>
                     </div>
+                    <a href="/logout" class="btn btn-outline-danger btn-sm">Se déconnecter</a>
                 </div>
                 <div class="p-4 rounded-3 bg-light">
                     <p class="text-muted mb-1">Numéro de téléphone</p>
@@ -27,7 +28,7 @@
                     <a href="/retrait" class="btn btn-outline-warning">Retrait d’argent</a>
                     <a href="/transfert" class="btn btn-outline-secondary">Transfert d’argent</a>
                     <a href="/historique" class="btn btn-outline-info">Historique des transactions</a>
-                    <a href="/gains" class="btn btn-outline-success">Voir les gains</a>
+                    <a href="/solde" class="btn btn-outline-success">Voir le solde</a>
                 </div>
             </div>
         </div>

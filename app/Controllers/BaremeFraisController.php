@@ -3,15 +3,18 @@
 namespace App\Controllers;
 
 use App\Models\BaremeFraisModel;
+use App\Models\TypeOperationModel;
 use CodeIgniter\Controller;
 
 class BaremeFraisController extends Controller
 {
     protected BaremeFraisModel $baremeModel;
+    protected TypeOperationModel $typeOperationModel;
 
     public function __construct()
     {
         $this->baremeModel = new BaremeFraisModel();
+        $this->typeOperationModel = new TypeOperationModel();
     }
 
     protected function ensureOperator(): bool
@@ -26,7 +29,8 @@ class BaremeFraisController extends Controller
         }
 
         $baremes = $this->baremeModel->getBaremes();
-        return view('baremes_frais/index', ['baremes' => $baremes]);
+        $types = $this->typeOperationModel->getTypesOperations();
+        return view('baremes_frais/index', ['baremes' => $baremes, 'types' => $types]);
     }
 
     public function ajouter()

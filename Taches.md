@@ -280,11 +280,53 @@
 
 ## 004022
 
-- 
+- [] Modification de la base de données.
+    - [] ajout de la colonne opérateur dans la table prefixes.
+    - [] ajout de la colonne commission_autre_operateur dans la table baremes_frais.
+
+- [] Mise à jour des modèles.
+    - [] PrefixeModel :
+        - [] gestion des préfixes des autres opérateurs.
+    - [] BaremeFraisModel :
+        - [] gestion du pourcentage de commission supplémentaire.
+    - [] OperationModel :
+        - [] calcul des frais pour un transfert vers un autre opérateur.
+        - [] calcul des gains de notre opérateur.
+        - [] calcul des montants à envoyer aux autres opérateurs.
+
+- [] Mise à jour des contrôleurs.
+    - [] PrefixeController :
+        - [] ajout des préfixes des autres opérateurs.
+        - [] modification des préfixes.
+    - [] BaremeFraisController :
+        - [] gestion du pourcentage de commission supplémentaire.
+    - [] OperationController :
+        - [] calcul des frais selon l'opérateur du destinataire.
+        - [] affichage des gains par opérateur.
+        - [] affichage des montants à envoyer à chaque opérateur.
 
 ## 004177
 
-- 
+- [] Mise à jour des vues.
+    - [] prefixes.php :
+        - [] ajout du champ opérateur.
+    - [] baremes_frais.php :
+        - [] ajout du champ commission supplémentaire.
+    - [] transfert.php :
+        - [] option « Inclure les frais de retrait ».
+        - [] transfert vers plusieurs numéros.
+        - [] partage automatique du montant entre les destinataires.
+    - [] situation_gains.php :
+        - [] séparation des gains entre notre opérateur et les autres opérateurs.
+    - [] situation_comptes.php :
+        - [] affichage des montants à envoyer à chaque opérateur.
+
+- [] Tests et corrections.
+    - [] test des transferts vers les autres opérateurs.
+    - [] test du calcul des commissions.
+    - [] test des transferts multiples.
+    - [] correction des erreurs détectées.
+    - [] mise à jour du fichier Taches.md.
 
 ---
 

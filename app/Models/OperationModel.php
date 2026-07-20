@@ -43,4 +43,13 @@ class OperationModel extends Model
         $rows = $this->selectSum('frais')->first();
         return (float) ($rows['frais'] ?? 0);
     }
+
+    public function getGainsParTypeOperation(): array
+    {
+        return $this->select('operations.type_operation_id, types_operation.nom, SUM(operations.frais) as total_frais, COUNT(operations.id) as nombre_transactions')
+            ->join('types_operation', 'types_operation.id = operations.type_operation_id', 'left')
+            ->groupBy('operations.type_operation_id, types_operation.nom')
+            ->orderBy('types_operation.nom', 'ASC')
+            ->findAll();
+    }
 }
