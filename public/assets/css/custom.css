@@ -1,0 +1,22 @@
+:root{
+  --mm-primary: #198754;
+  --mm-bg: #f8f9fa;
+  --mm-muted: #6c757d;
+}
+body{font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: var(--mm-bg); color:#212529}
+.navbar-brand{color:var(--mm-primary) !important}
+.card-mm{border:0; border-radius:.5rem; box-shadow:0 1px 6px rgba(16,24,40,.05)}
+.bi{vertical-align:-.125em}
+.container-fluid{max-width:1200px}
+/* Responsive table */
+.table-responsive{overflow-x:auto}
+
+/* Forms */
+.form-control:focus{box-shadow:0 0 0 .15rem rgba(25,135,84,.15); border-color:var(--mm-primary)}
+
+/* Buttons */
+.btn-mm{background:var(--mm-primary); color:#fff; border:none}
+.btn-mm:hover{background:#146b43}
+
+/* Small utilities */
+.muted{color:var(--mm-muted)}
