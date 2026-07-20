@@ -27,6 +27,7 @@ class BaremeFraisModel extends Model
 
     public function getBaremes($operateur = null): array
     {
+        $this->initialiserSchema();
         $builder = $this->select('baremes_frais.*, types_operation.nom as type_operation_nom')
             ->join('types_operation', 'types_operation.id = baremes_frais.type_operation_id', 'left');
             
