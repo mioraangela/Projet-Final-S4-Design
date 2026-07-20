@@ -23,16 +23,22 @@ class OperatorController extends Controller
     {
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
-        $operatorChoice = $this->request->getPost('operator_choice');
 
-        if ($username === 'admin' && $password === 'admin' && $operatorChoice) {
+        // Chaque opérateur a ses propres identifiants : yas/yas, orange/orange, airtel/airtel
+        $credentials = [
+            'yas'    => ['password' => 'yas',    'label' => 'Yas'],
+            'orange' => ['password' => 'orange', 'label' => 'Orange'],
+            'airtel' => ['password' => 'airtel', 'label' => 'Airtel'],
+        ];
+
+        if ($username && isset($credentials[$username]) && $password === $credentials[$username]['password']) {
             session()->set('role', 'operator');
-            session()->set('operator_name', $this->getOperatorLabel($operatorChoice));
-            session()->set('operator_network', $operatorChoice);
+            session()->set('operator_name', $credentials[$username]['label']);
+            session()->set('operator_network', $username);
             return redirect()->to('/operator/dashboard');
         }
 
-        return view('operator/login', ['error' => 'Veuillez choisir un opérateur et saisir les identifiants.']);
+        return view('operator/login', ['error' => 'Identifiants incorrects.']);
     }
 
     public function dashboard()
