@@ -94,9 +94,16 @@ class OperatorController extends Controller
 
         $clientModel = new ClientModel();
         $operationModel = new OperationModel();
+        $operateurCourant = session('operator_network') ?? 'yas';
         $client = $clientModel->find($id);
 
         if (!$client) {
+            return redirect()->to('/operator/comptes');
+        }
+        
+        // Vérifier que le client appartient bien à cet opérateur
+        $opClient = $operationModel->getOperateurParTelephone($client['telephone']);
+        if ($opClient !== $operateurCourant) {
             return redirect()->to('/operator/comptes');
         }
 
