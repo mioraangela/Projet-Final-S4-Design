@@ -305,7 +305,6 @@
         - [x] affichage des gains par opérateur.
         - [x] affichage des montants à envoyer à chaque opérateur.
 
-## 004177
 
 - [x] Mise à jour des vues.
     - [x] prefixes.php :

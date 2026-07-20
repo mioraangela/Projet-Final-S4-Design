@@ -28,6 +28,8 @@ class PrefixeModel extends Model
             $fields = $this->db->getFieldNames($this->table);
             if (!in_array('operateur', $fields)) {
                 $this->db->query("ALTER TABLE {$this->table} ADD COLUMN operateur VARCHAR(50) DEFAULT 'yas'");
+                // Mise à jour des préfixes déjà existants avec le bon opérateur
+                $this->_assignerOperateursExistants();
             }
             if ($this->countAllResults() > 0) {
                 return;
@@ -50,6 +52,22 @@ class PrefixeModel extends Model
         ];
         foreach ($prefixes as $prefixe => $op) {
             $this->insert(['prefixe' => $prefixe, 'operateur' => $op]);
+        }
+    }
+
+    private function _assignerOperateursExistants(): void
+    {
+        $mapping = [
+            '032' => 'orange', '033' => 'airtel', '034' => 'yas',
+            '035' => 'airtel', '037' => 'orange', '038' => 'yas',
+            '+26132' => 'orange', '+26133' => 'airtel', '+26134' => 'yas',
+            '+26135' => 'airtel', '+26137' => 'orange', '+26138' => 'yas',
+        ];
+        foreach ($mapping as $prefixe => $op) {
+            $this->db->query(
+                "UPDATE {$this->table} SET operateur = ? WHERE prefixe = ?",
+                [$op, $prefixe]
+            );
         }
     }
 
