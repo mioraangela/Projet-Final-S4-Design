@@ -32,8 +32,61 @@ class BaremeFraisModel extends Model
             ->findAll();
     }
 
+    protected function initialiserSchema(): void
+    {
+        if ($this->db->tableExists($this->table)) {
+            if ($this->countAllResults() > 0) {
+                return;
+            }
+        } else {
+            $this->db->query(
+                "CREATE TABLE IF NOT EXISTS {$this->table} (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    type_operation_id INTEGER NOT NULL,
+                    montant_minimum DECIMAL(12,2) NOT NULL,
+                    montant_maximum DECIMAL(12,2) NOT NULL,
+                    frais DECIMAL(12,2) NOT NULL DEFAULT 0.00
+                )"
+            );
+        }
+
+        $baremes = [
+            [1, 1, 5000, 0],
+            [1, 5001, 10000, 0],
+            [1, 10001, 50000, 0],
+            [1, 50001, 100000, 0],
+            [1, 100001, 500000, 0],
+            [1, 500001, 1000000, 0],
+            [1, 1000001, 2000000, 0],
+            [2, 1, 5000, 150],
+            [2, 5001, 10000, 300],
+            [2, 10001, 50000, 800],
+            [2, 50001, 100000, 1500],
+            [2, 100001, 500000, 3000],
+            [2, 500001, 1000000, 5000],
+            [2, 1000001, 2000000, 8000],
+            [3, 1, 5000, 100],
+            [3, 5001, 10000, 200],
+            [3, 10001, 50000, 500],
+            [3, 50001, 100000, 1000],
+            [3, 100001, 500000, 2000],
+            [3, 500001, 1000000, 3500],
+            [3, 1000001, 2000000, 5000],
+        ];
+
+        foreach ($baremes as $bareme) {
+            $this->insert([
+                'type_operation_id' => $bareme[0],
+                'montant_minimum' => $bareme[1],
+                'montant_maximum' => $bareme[2],
+                'frais' => $bareme[3],
+            ]);
+        }
+    }
+
     public function ajouterBareme(array $data): int
     {
+        $this->initialiserSchema();
         return $this->insert($data);
     }
 
@@ -49,11 +102,12 @@ class BaremeFraisModel extends Model
 
     public function rechercherFraisSelonMontant(int $typeOperationId, float $montant): ?float
     {
+        $this->initialiserSchema();
         $bareme = $this->where('type_operation_id', $typeOperationId)
             ->where('montant_minimum <=', $montant)
             ->where('montant_maximum >=', $montant)
             ->first();
 
-        return $bareme ? (float) $bareme['frais'] : null;
+        return $bareme ? (float) $bareme['frais'] : 0.0;
     }
 }

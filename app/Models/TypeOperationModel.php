@@ -20,13 +20,35 @@ class TypeOperationModel extends Model
 
     protected $skipValidation = false;
 
+    protected function initialiserSchema(): void
+    {
+        if ($this->db->tableExists($this->table)) {
+            if ($this->countAllResults() > 0) {
+                return;
+            }
+        } else {
+            $this->db->query(
+                "CREATE TABLE IF NOT EXISTS {$this->table} (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nom VARCHAR(50) NOT NULL UNIQUE
+                )"
+            );
+        }
+
+        $this->insert(['nom' => 'Dépôt']);
+        $this->insert(['nom' => 'Retrait']);
+        $this->insert(['nom' => 'Transfert']);
+    }
+
     public function getTypesOperations(): array
     {
+        $this->initialiserSchema();
         return $this->orderBy('nom', 'ASC')->findAll();
     }
 
     public function ajouterTypeOperation(string $nom): int
     {
+        $this->initialiserSchema();
         return $this->insert(['nom' => trim($nom)]);
     }
 

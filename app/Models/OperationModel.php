@@ -24,8 +24,28 @@ class OperationModel extends Model
 
     protected $skipValidation = false;
 
+    protected function initialiserSchema(): void
+    {
+        if ($this->db->tableExists($this->table)) {
+            return;
+        }
+
+        $this->db->query(
+            "CREATE TABLE IF NOT EXISTS {$this->table} (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                client_id INTEGER NOT NULL,
+                type_operation_id INTEGER NOT NULL,
+                destinataire VARCHAR(20) DEFAULT NULL,
+                montant DECIMAL(12,2) NOT NULL,
+                frais DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+                date_operation DATETIME NOT NULL
+            )"
+        );
+    }
+
     public function enregistrerOperation(array $data): int
     {
+        $this->initialiserSchema();
         return $this->insert($data);
     }
 
