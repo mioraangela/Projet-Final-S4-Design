@@ -15,6 +15,10 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Se connecter</button>
                 </form>
+
+                <div class="text-center mt-3">
+                    <a href="/operator/login" class="btn btn-outline-secondary w-100">Se connecter en tant qu’opérateur</a>
+                </div>
             </div>
         </div>
     </div>

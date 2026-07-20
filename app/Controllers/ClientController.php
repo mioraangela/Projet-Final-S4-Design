@@ -27,8 +27,8 @@ class ClientController extends Controller
             if ($telephoneNormalise !== '') {
                 $client = $this->clientModel->chercherClientParNumero($telephoneNormalise);
                 if (!$client) {
-                    $this->clientModel->creerClientAutomatiquement($telephoneNormalise);
-                    $client = $this->clientModel->chercherClientParNumero($telephoneNormalise);
+                    session()->setFlashdata('error', 'Ce numéro n’est pas encore enregistré. Veuillez saisir un numéro existant.');
+                    return view('client/login');
                 }
 
                 session()->set('client_id', $client['id']);
