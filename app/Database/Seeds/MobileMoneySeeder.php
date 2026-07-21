@@ -23,14 +23,17 @@ class MobileMoneySeeder extends Seeder
         ]);
 
         $this->db->table('clients')->insertBatch([
-            ['telephone' => '0341234567', 'solde' => 50000],
-            ['telephone' => '0387654321', 'solde' => 30000],
+            ['telephone' => '0341234567', 'solde' => 50000, 'solde_epargne' => 10000],
+            ['telephone' => '0387654321', 'solde' => 30000, 'solde_epargne' => 5000],
+            ['telephone' => '0329876543', 'solde' => 20000, 'solde_epargne' => 2000],
+            ['telephone' => '0334567890', 'solde' => 10000, 'solde_epargne' => 1000],
         ]);
 
         $this->db->table('types_operation')->insertBatch([
             ['nom' => 'Dépôt'],
             ['nom' => 'Retrait'],
             ['nom' => 'Transfert'],
+            ['nom' => 'Epargne'],
         ]);
 
         $baremes = [

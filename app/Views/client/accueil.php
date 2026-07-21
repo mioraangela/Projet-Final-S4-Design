@@ -27,6 +27,7 @@
                     <a href="/depot" class="btn btn-outline-primary">Dépôt d’argent</a>
                     <a href="/retrait" class="btn btn-outline-warning">Retrait d’argent</a>
                     <a href="/transfert" class="btn btn-outline-secondary">Transfert d’argent</a>
+                    <a href="/epargne" class="btn btn-outline-info">Gérer l’épargne</a>
                     <a href="/historique" class="btn btn-outline-info">Historique des transactions</a>
                     <a href="/solde" class="btn btn-outline-success">Voir le solde</a>
                 </div>

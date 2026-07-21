@@ -63,6 +63,7 @@ class OperationModel extends Model
             $this->db->query("INSERT OR IGNORE INTO types_operation (nom) VALUES ('Dépôt')");
             $this->db->query("INSERT OR IGNORE INTO types_operation (nom) VALUES ('Retrait')");
             $this->db->query("INSERT OR IGNORE INTO types_operation (nom) VALUES ('Transfert')");
+            $this->db->query("INSERT OR IGNORE INTO types_operation (nom) VALUES ('Epargne')");
         }
     }
 

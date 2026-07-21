@@ -38,6 +38,7 @@ class TypeOperationModel extends Model
         $this->insert(['nom' => 'Dépôt']);
         $this->insert(['nom' => 'Retrait']);
         $this->insert(['nom' => 'Transfert']);
+
     }
 
     public function getTypesOperations(): array

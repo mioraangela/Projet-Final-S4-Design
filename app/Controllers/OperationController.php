@@ -162,6 +162,26 @@ class OperationController extends Controller
         return view('operations/transfert');
     }
 
+    public function epargne()
+    {
+        if (!$this->ensureClient()) {
+            return redirect()->to('/login');
+        }
+
+        $clientId = session('client_id');
+        if (!$clientId) {
+            return redirect()->to('/login');
+        }
+
+        $pourcentageEpargne = $this->request->getPost('pourcentage_epargne');
+        if ($pourcentageEpargne !== null) {
+            $client = $this->clientModel->find($clientId);
+            $this->clientModel->modifierPourcentageEpargne($clientId, (float)$pourcentageEpargne);
+        }
+
+        return view('operations/epargne');
+    }
+
     public function historique()
     {
         if (!$this->ensureClient()) {
