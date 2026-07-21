@@ -132,9 +132,15 @@ class OperationController extends Controller
                         $tauxCommission = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
                         $commission = ($montantATransferer + $fraisFixe) * $tauxCommission / 100;
                     }
+
+                    $promotion = 0.0;
+                    $opDest = $this->operationModel->getOperateurParTelephone($destinataire);
+                    if ($opDest && $opDest == $opClient) {
+                        $tauxPromotion = $bareme ? (float)$bareme['promotion'] : 0.0;
+                        $promotion = ($montantATransferer + $fraisFixe) * $tauxPromotion / 100;
+                    }
                     
-                    // Total frais payés par le client = frais_fixe + commission
-                    $fraisTotal = $fraisFixe + $commission;
+                    $fraisTotal = $fraisFixe + $commission - $promotion;
                     
                     // Débit client : montant + frais_fixe + commission
                     $soldeActuel -= ($montantATransferer + $fraisTotal);

@@ -65,6 +65,9 @@ class MobileMoneySeeder extends Seeder
                 if (!isset($bareme['commission_autre_operateur'])) {
                     $bareme['commission_autre_operateur'] = 0;
                 }
+                if (!isset($bareme['promotion'])) {
+                    $bareme['promotion'] = 0;
+                }
                 $bareme['operateur'] = $operateur;
                 $baremesAInserer[] = $bareme;
             }

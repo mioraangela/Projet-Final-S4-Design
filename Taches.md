@@ -333,7 +333,9 @@
 
 ## 004022
 
-- 
+- [x] Ajout de promotion pour transfert interne.
+    - [x] Mise a jour de la base.
+    - [x] Mise a jour des modeles, controleurs et vues.
 
 ## 004177
 

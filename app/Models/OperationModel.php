@@ -116,7 +116,7 @@ class OperationModel extends Model
             'total'              => 0,
             'meme_operateur'     => 0,
             'autres_operateurs'  => 0,
-            'commissions'        => 0,  // Commissions reçues (transferts entrants d'autres réseaux)
+            'commissions'        => 0,
             'par_type'           => []
         ];
         
@@ -128,16 +128,13 @@ class OperationModel extends Model
             
             $opClient = $this->getOperateurParTelephone($client['telephone']);
             
-            // ---- CAS 1 : Le client expéditeur appartient à l'opérateur courant ----
             if ($opClient === $operateurCourant) {
-                $fraisTotal = (float)$op['frais']; // frais_fixe + commission payés par le client
+                $fraisTotal = (float)$op['frais'];
                 
                 if ($op['destinataire']) {
                     $opDest = $this->getOperateurParTelephone($op['destinataire']);
                     
                     if ($opDest && $opDest !== $operateurCourant) {
-                        // Transfert SORTANT vers un autre opérateur
-                        // L'opérateur source garde seulement les frais fixes
                         $bareme = $baremeModel->rechercherBaremeSelonMontant(3, (float)$op['montant'], $operateurCourant);
                         $fraisFixe = $bareme ? (float)$bareme['frais'] : 0.0;
                         $tauxCommission = $bareme ? (float)$bareme['commission_autre_operateur'] : 0.0;
@@ -151,13 +148,11 @@ class OperationModel extends Model
                         }
                         $gains['par_type'][$op['type_operation']] += $fraisFixe;
                         
-                        // Tracker la commission due à l'opérateur destinataire
                         if (!isset($montantsAEnvoyer[$opDest])) {
                             $montantsAEnvoyer[$opDest] = 0;
                         }
                         $montantsAEnvoyer[$opDest] += $commission;
                     } else {
-                        // Transfert interne : l'opérateur garde tous les frais
                         $gains['total']          += $fraisTotal;
                         $gains['meme_operateur'] += $fraisTotal;
                         
@@ -178,8 +173,6 @@ class OperationModel extends Model
                 }
             }
             
-            // ---- CAS 2 : Transfert ENTRANT vers un client de l'opérateur courant ----
-            // L'expéditeur est d'un autre réseau → la commission revient à l'opérateur courant
             if ($op['destinataire'] && $opClient !== $operateurCourant) {
                 $opDest = $this->getOperateurParTelephone($op['destinataire']);
                 if ($opDest === $operateurCourant) {

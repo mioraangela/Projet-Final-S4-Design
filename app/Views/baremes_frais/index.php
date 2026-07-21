@@ -31,6 +31,10 @@
                         <label class="form-label" title="Commission supplémentaire vers un autre opérateur (%)">Comm. ext (%)</label>
                         <input type="number" class="form-control" name="commission_autre_operateur" min="0" step="0.01" value="0" required>
                     </div>
+                    <div class="col-md-2">
+                        <label class="form-label" title="Promotion pour les transfert internes (%)">Promotion (%)</label>
+                        <input type="number" class="form-control" name="promotion" min="0" step="0.01" value="0" required>
+                    </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100">Ajouter</button>
                     </div>
@@ -60,6 +64,7 @@
                                     <td><?= esc(number_format((float) ($bareme['montant_maximum'] ?? 0), 0, ',', ' ')) ?> Ariary</td>
                                     <td><?= esc(number_format((float) ($bareme['frais'] ?? 0), 0, ',', ' ')) ?> Ariary</td>
                                     <td><?= esc(number_format((float) ($bareme['commission_autre_operateur'] ?? 0), 2, ',', ' ')) ?> %</td>
+                                    <td><?= esc(number_format((float) ($bareme['promotion'] ?? 0), 2, ',', ' ')) ?> %</td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

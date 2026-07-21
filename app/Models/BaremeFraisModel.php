@@ -60,6 +60,7 @@ class BaremeFraisModel extends Model
                     montant_maximum DECIMAL(12,2) NOT NULL,
                     frais DECIMAL(12,2) NOT NULL DEFAULT 0.00,
                     commission_autre_operateur DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+                    promotion DECIMAL(12,2) NOT NULL DEFAULT 0.00,
                     operateur VARCHAR(50) NOT NULL
                 )"
             );
@@ -141,7 +142,8 @@ class BaremeFraisModel extends Model
                 'montant_maximum' => $bareme[2],
                 'frais' => $bareme[3],
                 'commission_autre_operateur' => $bareme[4],
-                'operateur' => $bareme[5],
+                'promotion' => $bareme[5],
+                'operateur' => $bareme[6],
             ]);
         }
     }
